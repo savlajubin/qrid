@@ -1,43 +1,37 @@
 import { NextResponse } from "next/server";
-import { generateQrSvg } from "../../../lib/qrEngine";
-import { sanitizeInput, sanitizeSvg } from "../../../lib/security";
-import { qrDesigns } from "../../../lib/qrDesigns";
-import { DEFAULT_SIZE } from "../../../lib/constants";
+import { generateQrSvg } from "../../lib/qrEngine";
+import { sanitizeInput, sanitizeSvg } from "../../lib/security";
+import { DEFAULT_SIZE } from "../../lib/constants";
 
-/**
- * GET /api/v1
- * Params:
- *  - data (required)
- *  - design (optional)
- *  - size (optional)
- */
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
 
   const rawData = searchParams.get("data");
-  const design = searchParams.get("design") || "classic";
   const size = Number(searchParams.get("size")) || DEFAULT_SIZE;
 
+  const fg = searchParams.get("fg")
+    ? `#${searchParams.get("fg")}`
+    : "#000000";
+
+  const bg = searchParams.get("bg")
+    ? `#${searchParams.get("bg")}`
+    : "#ffffff";
+
   if (!rawData) {
-    return svgError("Missing `data` parameter");
+    return svgError("Missing data");
   }
 
-  if (!qrDesigns[design]) {
-    return svgError("Invalid design");
-  }
-
-  if (size < 100 || size > 1000) {
-    return svgError("Invalid size (100–1000)");
+  if (!isValidHex(fg) || !isValidHex(bg)) {
+    return svgError("Invalid color value");
   }
 
   const data = sanitizeInput(rawData);
 
   try {
-    const svg = await generateQrSvg(
-      data,
-      size,
-      qrDesigns[design]
-    );
+    const svg = await generateQrSvg(data, size, {
+      fg,
+      bg
+    });
 
     return new NextResponse(sanitizeSvg(svg), {
       headers: {
@@ -46,18 +40,22 @@ export async function GET(request) {
       }
     });
   } catch {
-    return svgError("Failed to generate QR");
+    return svgError("QR generation failed");
   }
 }
 
 /* -----------------------------
-   SVG Error Renderer
+   Helpers
 ----------------------------- */
+
+function isValidHex(color) {
+  return /^#[0-9a-fA-F]{6}$/.test(color);
+}
 
 function svgError(message) {
   const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
-  <rect width="100%" height="100%" fill="#f44336"/>
+  <rect width="100%" height="100%" fill="#d32f2f"/>
   <text x="50%" y="50%" fill="#fff" font-size="14"
         text-anchor="middle" dominant-baseline="middle">
     ${message}
@@ -68,8 +66,7 @@ function svgError(message) {
   return new NextResponse(svg, {
     status: 400,
     headers: {
-      "Content-Type": "image/svg+xml",
-      "Cache-Control": "no-store"
+      "Content-Type": "image/svg+xml"
     }
   });
 }

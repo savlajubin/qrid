@@ -18,7 +18,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Menu
+  Menu,
+  Typography
 } from "@mui/material";
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
@@ -42,7 +43,11 @@ export default function PageContent() {
     text: "",
     upi: { pa: "", pn: "", am: "" },
     wifi: { ssid: "", password: "", security: "WPA" },
-    vcard: { name: "", phone: "", email: "" }
+    vcard: { name: "", phone: "", email: "" },
+    colors: {
+      fg: "",
+      bg: ""
+    }
   });
 
   const [touched, setTouched] = useState(false);
@@ -72,8 +77,8 @@ export default function PageContent() {
 
     const dataToGenerate = qrData || DEFAULT_QR_TEXT;
 
-    generateQr({ data: dataToGenerate, design }).then(setSvg);
-  }, [qrData, design, shouldShowDefaultQr]);
+    generateQr({ data: dataToGenerate, colors: form.colors }).then(setSvg);
+  }, [qrData, form.colors, shouldShowDefaultQr]);
 
 
   function showSnackbar(message, severity = "info") {
@@ -82,8 +87,12 @@ export default function PageContent() {
 
   const apiUrl =
     typeof window !== "undefined" && qrData
-      ? `${location.origin}/api/v1?data=${encodeURIComponent(qrData)}&design=${design}`
+      ? `${location.origin}/api?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
+        ? `&fg=${form.colors.fg.replace("#", "") || "000000"}&bg=${form.colors.bg.replace("#", "") || "ffffff"}`
+        : ""
+      }`
       : "";
+
 
   const embedCode = `<iframe src="${apiUrl}" width="300" height="300" style="border:0"></iframe>`;
 
@@ -297,16 +306,49 @@ export default function PageContent() {
                 )}
 
                 <Box mt={2}>
-                  <Select
-                    fullWidth
-                    value={design}
-                    onChange={e => setDesign(e.target.value)}
-                  >
-                    <MenuItem value="classic">Classic</MenuItem>
-                    <MenuItem value="phonepe">PhonePe</MenuItem>
-                    <MenuItem value="gpay">GPay</MenuItem>
-                  </Select>
+                  <Typography mb={2} variant="subtitle2" gutterBottom>
+                    Colors (optional)
+                  </Typography>
+
+                  <Box display="flex" gap={2}>
+                    <TextField
+                      label="Foreground"
+                      type="color"
+                      value={form.colors.fg || "#000000"}
+                      onChange={e => {
+                        setDirty(true);
+                        setForm({
+                          ...form,
+                          colors: {
+                            ...form.colors,
+                            fg: e.target.value
+                          }
+                        });
+                      }}
+                      onBlur={() => setTouched(true)}
+                      fullWidth
+                    />
+
+                    <TextField
+                      label="Background"
+                      type="color"
+                      value={form.colors.bg || "#ffffff"}
+                      onChange={e => {
+                        setDirty(true);
+                        setForm({
+                          ...form,
+                          colors: {
+                            ...form.colors,
+                            bg: e.target.value
+                          }
+                        });
+                      }}
+                      onBlur={() => setTouched(true)}
+                      fullWidth
+                    />
+                  </Box>
                 </Box>
+
               </Card>
             </Grid>
 

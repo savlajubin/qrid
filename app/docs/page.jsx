@@ -11,6 +11,7 @@ import {
   Button
 } from "@mui/material";
 import { DEFAULT_QR_TEXT } from "../../lib/constants";
+import { Grid } from "@mui/system";
 
 export default function DocsPage() {
   const [mounted, setMounted] = useState(false);
@@ -55,6 +56,33 @@ export default function DocsPage() {
           Versioned QR generation endpoint (SVG output).
         </Typography>
       </Card>
+
+      <Card sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          API v2 (Colors)
+        </Typography>
+
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          Customize QR foreground and background colors.
+        </Typography>
+
+        <TextField
+          fullWidth
+          value={`/api/v2?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=000000&bg=ffffff`}
+          slotProps={{
+            input: {
+              readOnly: true,
+            },
+          }}
+          sx={{ mb: 2 }}
+        />
+
+        <Typography variant="body2" color="text.secondary">
+          <b>fg</b> → foreground hex color (without #)<br />
+          <b>bg</b> → background hex color (without #)
+        </Typography>
+      </Card>
+
 
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
@@ -136,20 +164,42 @@ export default function DocsPage() {
 
         <Divider sx={{ my: 3 }} />
 
-        <Typography variant="body2" color="text.secondary" mb={2}>
-          Live preview:
-        </Typography>
 
-        {/* ✅ Render iframe ONLY after mount */}
-        {mounted && exampleUrl && (
-          <iframe
-            src={exampleUrl}
-            width="300"
-            height="300"
-            style={{ border: 0 }}
-            title="QR Preview"
-          />
-        )}
+        <Grid container spacing={3}>
+          {/* LEFT */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography variant="body2" color="text.secondary" mb={2}>
+              Live preview v1:
+            </Typography>
+            {/* ✅ Render iframe ONLY after mount */}
+            {mounted && exampleUrl && (
+              <iframe
+                src={exampleUrl}
+                width="300"
+                height="300"
+                style={{ border: 0 }}
+                title="QR Preview"
+              />
+            )}
+          </Grid>
+
+          {/* RIGHT */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography variant="body2" color="text.secondary" mb={2}>
+              Live preview v2 (with custom colors):
+            </Typography>
+            {mounted && exampleUrl && (
+              <iframe
+                src={`/api/v2?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
+                width="300"
+                height="300"
+                style={{ border: 0 }}
+                title="QR v2 preview"
+              />
+            )}
+          </Grid>
+        </Grid>
+
       </Card>
     </Container>
   );
