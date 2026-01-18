@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { DEFAULT_QR_TEXT } from "../../../lib/constants";
-import { BASE_PATH } from "../lib/basePath";
+import { BASE_PATH } from "../../../lib/basePath";
 
 export default function DocsPage() {
   const [mounted, setMounted] = useState(false);
