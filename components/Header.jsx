@@ -14,6 +14,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import HomeIcon from "@mui/icons-material/Home";
 import DocsIcon from "@mui/icons-material/LibraryBooks";
 import { APP_DESCRIPTION, APP_NAME, SOCIALS } from "../lib/constants";
+import { BASE_PATH } from "../lib/basePath";
 
 export default function Header({ darkMode, onToggleDarkMode }) {
   return (
@@ -23,7 +24,7 @@ export default function Header({ darkMode, onToggleDarkMode }) {
         <Box display="flex" alignItems="center" gap={1.5} sx={{ height: 64 }}>
           <Box
             component="img"
-            src={darkMode ? "/images/js-logo-512-dark.png" : "/images/js-logo-512-light.png"}
+            src={`${BASE_PATH}/images/${darkMode ? "/js-logo-512-dark.png" : "/js-logo-512-light.png"}`}
             alt={`${APP_NAME} Logo`}
             sx={{
               height: '100%',     // Fill the parent Box height
@@ -45,14 +46,14 @@ export default function Header({ darkMode, onToggleDarkMode }) {
         {/* RIGHT */}
         <Box display="flex" alignItems="center">
           <IconButton
-            href="/"
+            href={`${BASE_PATH}/`}
             aria-label="Home"
           >
             <HomeIcon />
           </IconButton>
 
           <IconButton
-            href="/docs"
+            href={`${BASE_PATH}/docs`}
             aria-label="Documentation"
           >
             <DocsIcon />

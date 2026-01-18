@@ -89,7 +89,7 @@ export default function PageContent() {
   useEffect(() => {
     const apiUrlData =
       typeof window !== "undefined" && qrData
-        ? `${location.origin}/embed?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
+        ? `${location.origin}${BASE_PATH}/embed?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
           ? `&fg=${form.colors.fg.replace("#", "") || "000000"}&bg=${form.colors.bg.replace("#", "") || "ffffff"}`
           : ""
         }`

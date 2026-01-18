@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const repoName = "qrido";
-
 const isGithubPages = process.env.GITHUB_PAGES === "true";
 
 const nextConfig = {

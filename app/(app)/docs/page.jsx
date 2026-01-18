@@ -20,7 +20,7 @@ export default function DocsPage() {
   useEffect(() => {
     setMounted(true);
     setExampleUrl(
-      `${location.origin}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}`
+      `${location.origin}${BASE_PATH}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}`
     );
   }, []);
 
@@ -190,7 +190,7 @@ export default function DocsPage() {
             </Typography>
             {mounted && exampleUrl && (
               <iframe
-                src={`/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
+                src={`${BASE_PATH}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
                 width="300"
                 height="300"
                 style={{ border: 0 }}
