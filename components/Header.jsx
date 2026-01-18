@@ -17,6 +17,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import DocsIcon from "@mui/icons-material/LibraryBooks";
 import { APP_DESCRIPTION, APP_NAME, SOCIALS } from "../lib/constants";
 import { BASE_PATH } from "../lib/basePath";
+import Link from "next/link";
 
 export default function Header({ darkMode, onToggleDarkMode }) {
   return (
@@ -48,14 +49,16 @@ export default function Header({ darkMode, onToggleDarkMode }) {
         {/* RIGHT */}
         <Box display="flex" alignItems="center">
           <IconButton
-            href={`${BASE_PATH}/`}
+            component={Link}
+            href="/"
             aria-label="Home"
           >
             <HomeIcon />
           </IconButton>
 
           <IconButton
-            href={`${BASE_PATH}/docs`}
+            component={Link}
+            href="/docs"
             aria-label="Documentation"
           >
             <DocsIcon />
