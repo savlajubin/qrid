@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AppBar,
   Toolbar,
@@ -24,7 +26,7 @@ export default function Header({ darkMode, onToggleDarkMode }) {
         <Box display="flex" alignItems="center" gap={1.5} sx={{ height: 64 }}>
           <Box
             component="img"
-            src={`${BASE_PATH}/images/${darkMode ? "/js-logo-512-dark.png" : "/js-logo-512-light.png"}`}
+            src={`${BASE_PATH}/images${darkMode ? "/js-logo-512-dark.png" : "/js-logo-512-light.png"}`}
             alt={`${APP_NAME} Logo`}
             sx={{
               height: '100%',     // Fill the parent Box height
