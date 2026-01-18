@@ -11,6 +11,9 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import HomeIcon from "@mui/icons-material/Home";
+import DocsIcon from "@mui/icons-material/LibraryBooks";
+import { APP_DESCRIPTION, APP_NAME, SOCIALS } from "../lib/constants";
 
 export default function Header({ darkMode, onToggleDarkMode }) {
   return (
@@ -21,7 +24,7 @@ export default function Header({ darkMode, onToggleDarkMode }) {
           <Box
             component="img"
             src={darkMode ? "/images/js-logo-512-dark.png" : "/images/js-logo-512-light.png"}
-            alt="QRido"
+            alt={`${APP_NAME} Logo`}
             sx={{
               height: '100%',     // Fill the parent Box height
               width: 'auto',       // Maintain aspect ratio
@@ -31,10 +34,10 @@ export default function Header({ darkMode, onToggleDarkMode }) {
           />
           <Box>
             <Typography variant="h6" fontWeight={600} lineHeight={1.1}>
-              QRido
+              {APP_NAME}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Create, share & embed QR codes
+              {APP_DESCRIPTION}
             </Typography>
           </Box>
         </Box>
@@ -42,7 +45,21 @@ export default function Header({ darkMode, onToggleDarkMode }) {
         {/* RIGHT */}
         <Box display="flex" alignItems="center">
           <IconButton
-            href="https://github.com/savlajubin"
+            href="/"
+            aria-label="Home"
+          >
+            <HomeIcon />
+          </IconButton>
+
+          <IconButton
+            href="/docs"
+            aria-label="Documentation"
+          >
+            <DocsIcon />
+          </IconButton>
+
+          <IconButton
+            href={SOCIALS.GITHUB}
             target="_blank"
             aria-label="GitHub"
           >
@@ -50,7 +67,7 @@ export default function Header({ darkMode, onToggleDarkMode }) {
           </IconButton>
 
           <IconButton
-            href="https://www.linkedin.com/in/savlajubin/"
+            href={SOCIALS.LINKEDIN}
             target="_blank"
             aria-label="LinkedIn"
           >

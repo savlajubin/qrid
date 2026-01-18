@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { APP_NAME } from "../lib/constants";
 
 export default function Footer() {
   return (
@@ -11,8 +12,8 @@ export default function Footer() {
         borderColor: "divider"
       }}
     >
-      <Typography variant="caption" color="text.secondary">
-        Built by Jubin
+      <Typography variant="body2" color="text.secondary">
+        © {APP_NAME} — Built by Jubin
       </Typography>
     </Box>
   );
