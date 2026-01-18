@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 export default function AppThemeProvider({ children }) {
-  const [darkMode, setDarkMode] = useState(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const [darkMode, setDarkMode] = useState(null);
 
   useEffect(() => {
     // Select the media query

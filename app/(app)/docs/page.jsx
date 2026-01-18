@@ -10,7 +10,7 @@ import {
   TextField,
   Button
 } from "@mui/material";
-import { DEFAULT_QR_TEXT } from "../../lib/constants";
+import { DEFAULT_QR_TEXT } from "../../../lib/constants";
 import { Grid } from "@mui/system";
 
 export default function DocsPage() {
@@ -20,7 +20,7 @@ export default function DocsPage() {
   useEffect(() => {
     setMounted(true);
     setExampleUrl(
-      `${location.origin}/api/v1?data=${encodeURIComponent(DEFAULT_QR_TEXT)}`
+      `${location.origin}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}`
     );
   }, []);
 
@@ -190,7 +190,7 @@ export default function DocsPage() {
             </Typography>
             {mounted && exampleUrl && (
               <iframe
-                src={`/api/v2?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
+                src={`/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
                 width="300"
                 height="300"
                 style={{ border: 0 }}

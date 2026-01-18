@@ -27,15 +27,14 @@ import {
   Code as CodeIcon
 } from "@mui/icons-material";
 
-import { generateQr } from "../lib/qrService";
-import { buildPayload, DEFAULT_QR_TEXT } from "../lib/qrPayloads";
-import { validatePreset } from "../lib/validators";
-import { downloadSvg, downloadPngFromSvg, downloadJpgFromSvg } from "../lib/pngExport";
+import { generateQr } from "../../lib/qrService";
+import { buildPayload, DEFAULT_QR_TEXT } from "../../lib/qrPayloads";
+import { validatePreset } from "../../lib/validators";
+import { downloadSvg, downloadPngFromSvg, downloadJpgFromSvg } from "../../lib/pngExport";
 
 
 export default function PageContent() {
   const [preset, setPreset] = useState("url");
-  const [design, setDesign] = useState("classic");
   const [svg, setSvg] = useState("");
 
   const [form, setForm] = useState({
@@ -60,6 +59,8 @@ export default function PageContent() {
   });
 
   const [embedOpen, setEmbedOpen] = useState(false);
+  const [embedCode, setEmbedCode] = useState("");
+  const [apiUrl, setApiUrl] = useState("");
   const [downloadAnchor, setDownloadAnchor] = useState(null);
 
   const validationError = validatePreset(preset, form);
@@ -85,16 +86,18 @@ export default function PageContent() {
     setSnackbar({ open: true, message, severity });
   }
 
-  const apiUrl =
-    typeof window !== "undefined" && qrData
-      ? `${location.origin}/api?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
-        ? `&fg=${form.colors.fg.replace("#", "") || "000000"}&bg=${form.colors.bg.replace("#", "") || "ffffff"}`
-        : ""
-      }`
-      : "";
+  useEffect(() => {
+    const apiUrlData =
+      typeof window !== "undefined" && qrData
+        ? `${location.origin}/embed?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
+          ? `&fg=${form.colors.fg.replace("#", "") || "000000"}&bg=${form.colors.bg.replace("#", "") || "ffffff"}`
+          : ""
+        }`
+        : "";
 
-
-  const embedCode = `<iframe src="${apiUrl}" width="300" height="300" style="border:0"></iframe>`;
+    setApiUrl(apiUrlData);
+    setEmbedCode(`<iframe src="${apiUrlData}" width="300" height="300" style="border:0"></iframe>`);
+  }, [qrData, form.colors]);
 
   return (
     <>
