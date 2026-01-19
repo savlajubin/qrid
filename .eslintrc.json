@@ -6,9 +6,36 @@
   "rules": {
     "no-console": [
       "warn",
-      { "allow": ["warn", "error"] }
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
     ],
+    "no-undef": "warn",
     "prefer-const": "error",
-    "no-unused-vars": "warn"
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "no-use-before-define": [
+      "warn",
+      {
+        "functions": false
+      }
+    ],
+    "eqeqeq": [
+      "error",
+      "always"
+    ],
+    "no-shadow": "warn",
+    "no-redeclare": "error",
+    "no-fallthrough": "error",
+    "consistent-return": "warn",
+    "no-implicit-coercion": "warn"
   }
 }

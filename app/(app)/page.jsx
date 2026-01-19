@@ -33,6 +33,7 @@ import { validatePreset } from "../../lib/validators";
 import { downloadSvg, downloadPngFromSvg, downloadJpgFromSvg } from "../../lib/pngExport";
 import { placeHolderSVG } from "../../lib/qrEngine";
 import { BASE_PATH } from "../../lib/basePath";
+import { encodeBase64 } from "../../lib/security";
 
 export default function PageContent() {
   const [preset, setPreset] = useState("url");
