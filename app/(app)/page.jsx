@@ -32,7 +32,7 @@ import { buildPayload, DEFAULT_QR_TEXT } from "../../lib/qrPayloads";
 import { validatePreset } from "../../lib/validators";
 import { downloadSvg, downloadPngFromSvg, downloadJpgFromSvg } from "../../lib/pngExport";
 import { placeHolderSVG } from "../../lib/qrEngine";
-
+import { BASE_PATH } from "../../lib/basePath";
 
 export default function PageContent() {
   const [preset, setPreset] = useState("url");
