@@ -31,6 +31,7 @@ import { generateQr } from "../../lib/qrService";
 import { buildPayload, DEFAULT_QR_TEXT } from "../../lib/qrPayloads";
 import { validatePreset } from "../../lib/validators";
 import { downloadSvg, downloadPngFromSvg, downloadJpgFromSvg } from "../../lib/pngExport";
+import { placeHolderSVG } from "../../lib/qrEngine";
 
 
 export default function PageContent() {
@@ -89,7 +90,7 @@ export default function PageContent() {
   useEffect(() => {
     const apiUrlData =
       typeof window !== "undefined" && qrData
-        ? `${location.origin}${BASE_PATH}/embed?data=${encodeURIComponent(qrData)}${(form.colors.fg || form.colors.bg)
+        ? `${location.origin}${BASE_PATH}/embed?data=${encodeBase64(encodeURIComponent(qrData))}${(form.colors.fg || form.colors.bg)
           ? `&fg=${form.colors.fg.replace("#", "") || "000000"}&bg=${form.colors.bg.replace("#", "") || "ffffff"}`
           : ""
         }`
@@ -359,20 +360,18 @@ export default function PageContent() {
             <Grid size={{ xs: 12, md: 6 }}>
               <Card sx={{ p: 2 }}>
                 <Box display="flex" justifyContent="center">
-                  {svg && (
-                    <Box
-                      component="img"
-                      // Convert string to base64 Data URL for safe rendering
-                      src={`data:image/svg+xml;utf8,${encodeURIComponent(svg)}`}
-                      alt="Generated QR Code"
-                      sx={{
-                        width: '100%',
-                        maxWidth: '300px',
-                        height: 'auto',
-                        display: 'block'
-                      }}
-                    />
-                  )}
+                  <Box
+                    component="img"
+                    // Convert string to base64 Data URL for safe rendering
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(svg ? svg : placeHolderSVG)}`}
+                    alt="Generated QR Code"
+                    sx={{
+                      width: '100%',
+                      maxWidth: '300px',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
                 </Box>
 
                 <Box

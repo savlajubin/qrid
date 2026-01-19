@@ -14,15 +14,21 @@ import {
 
 import { DEFAULT_QR_TEXT } from "../../../lib/constants";
 import { BASE_PATH } from "../../../lib/basePath";
+import { encodeBase64 } from "../../../lib/security";
 
 export default function DocsPage() {
   const [mounted, setMounted] = useState(false);
+  const [origin, setOrigin] = useState("");
   const [exampleUrl, setExampleUrl] = useState("");
 
   useEffect(() => {
     setMounted(true);
+    setOrigin(window.location.origin);
+
+    const encoded = encodeBase64(DEFAULT_QR_TEXT);
+
     setExampleUrl(
-      `${location.origin}${BASE_PATH}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}`
+      `${window.location.origin}${BASE_PATH}/embed?data=${encoded}`
     );
   }, []);
 
@@ -30,102 +36,74 @@ export default function DocsPage() {
 
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
+      {/* HEADER */}
       <Typography variant="h3" fontWeight={600} gutterBottom>
-        API Documentation
+        Embed Documentation
       </Typography>
 
       <Typography color="text.secondary" mb={4}>
-        Generate QR codes via a simple API.
+        QRido generates QR codes using a static embed endpoint.
+        The embed URL supports Base64-encoded data and optional
+        customization parameters.
       </Typography>
 
+      {/* ENDPOINT */}
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Endpoint
+          Embed Endpoint
         </Typography>
 
         <TextField
           fullWidth
-          value="/api/v1"
-          slotProps={{
-            input: {
-              readOnly: true,
-            },
-          }}
+          value="/embed"
+          InputProps={{ readOnly: true }}
           sx={{ mb: 2 }}
         />
 
         <Typography variant="body2" color="text.secondary">
-          Versioned QR generation endpoint (SVG output).
+          This endpoint renders an SVG QR code and is safe for static hosting
+          and iframe embedding.
         </Typography>
       </Card>
 
+      {/* PARAMETERS */}
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          API v2 (Colors)
-        </Typography>
-
-        <Typography variant="body2" color="text.secondary" mb={2}>
-          Customize QR foreground and background colors.
-        </Typography>
-
-        <TextField
-          fullWidth
-          value={`/api/v2?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=000000&bg=ffffff`}
-          slotProps={{
-            input: {
-              readOnly: true,
-            },
-          }}
-          sx={{ mb: 2 }}
-        />
-
-        <Typography variant="body2" color="text.secondary">
-          <b>fg</b> → foreground hex color (without #)<br />
-          <b>bg</b> → background hex color (without #)
-        </Typography>
-      </Card>
-
-
-      <Card sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h5" gutterBottom>
-          Query Parameters
+          Parameters
         </Typography>
 
         <Box mb={2}>
           <Typography><b>data</b> (required)</Typography>
           <Typography variant="body2" color="text.secondary">
-            Text or URL to encode into QR
+            Base64-encoded text or URL to generate the QR code.
           </Typography>
         </Box>
 
         <Box mb={2}>
-          <Typography><b>design</b> (optional)</Typography>
+          <Typography><b>fg</b> (optional)</Typography>
           <Typography variant="body2" color="text.secondary">
-            classic | phonepe | gpay (default: classic)
+            Foreground color (hex, without #). Default: <code>000000</code>
           </Typography>
         </Box>
 
         <Box>
-          <Typography><b>size</b> (optional)</Typography>
+          <Typography><b>bg</b> (optional)</Typography>
           <Typography variant="body2" color="text.secondary">
-            Size in pixels (100–1000)
+            Background color (hex, without #). Default: <code>ffffff</code>
           </Typography>
         </Box>
       </Card>
 
+      {/* EXAMPLE URL */}
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Example Request
+          Example Embed URL
         </Typography>
 
         <TextField
           fullWidth
           value={exampleUrl}
-          slotProps={{
-            input: {
-              readOnly: true,
-            },
-          }}
+          InputProps={{ readOnly: true }}
           sx={{ mb: 2 }}
         />
 
@@ -138,9 +116,10 @@ export default function DocsPage() {
         </Button>
       </Card>
 
+      {/* EMBED CODE */}
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Embed QR Code
+          Embed Code
         </Typography>
 
         <TextField
@@ -148,11 +127,7 @@ export default function DocsPage() {
           multiline
           minRows={3}
           value={iframeCode}
-          slotProps={{
-            input: {
-              readOnly: true,
-            },
-          }}
+          InputProps={{ readOnly: true }}
           sx={{ mb: 2 }}
         />
 
@@ -166,42 +141,44 @@ export default function DocsPage() {
 
         <Divider sx={{ my: 3 }} />
 
-
+        {/* LIVE PREVIEWS */}
         <Grid container spacing={3}>
-          {/* LEFT */}
+          {/* DEFAULT */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="body2" color="text.secondary" mb={2}>
-              Live preview v1:
+              Default QR Preview
             </Typography>
-            {/* ✅ Render iframe ONLY after mount */}
+
             {mounted && exampleUrl && (
               <iframe
                 src={exampleUrl}
                 width="300"
                 height="300"
                 style={{ border: 0 }}
-                title="QR Preview"
+                title="QR Preview Default"
               />
             )}
           </Grid>
 
-          {/* RIGHT */}
+          {/* CUSTOM COLORS */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="body2" color="text.secondary" mb={2}>
-              Live preview v2 (with custom colors):
+              Custom Colors Preview
             </Typography>
-            {mounted && exampleUrl && (
+
+            {mounted && origin && (
               <iframe
-                src={`${BASE_PATH}/embed?data=${encodeURIComponent(DEFAULT_QR_TEXT)}&fg=673ab7&bg=f5f5f5`}
+                src={`${origin}${BASE_PATH}/embed?data=${encodeBase64(
+                  DEFAULT_QR_TEXT
+                )}&fg=673ab7&bg=f5f5f5`}
                 width="300"
                 height="300"
                 style={{ border: 0 }}
-                title="QR v2 preview"
+                title="QR Preview Custom"
               />
             )}
           </Grid>
         </Grid>
-
       </Card>
     </Container>
   );

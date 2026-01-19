@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { generateQrSvg } from "../../../lib/qrEngine";
+import { generateQrSvg, placeHolderSVG } from "../../../lib/qrEngine";
 import { DEFAULT_SIZE } from "../../../lib/constants";
+import { decodeBase64 } from "../../../lib/security";
 
 export default function EmbedClient() {
   const searchParams = useSearchParams();
   const [svg, setSvg] = useState("");
 
-  const data = searchParams.get("data");
+  const encodedData = searchParams.get("data");
+  const data = encodedData ? decodeBase64(encodedData) : null;
   const fg = searchParams.get("fg") || "000000";
   const bg = searchParams.get("bg") || "ffffff";
 
@@ -33,7 +35,19 @@ export default function EmbedClient() {
         alignItems: "center",
         justifyContent: "center"
       }}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
+    >
+      <img
+        src={`data:image/svg+xml;utf8,${encodeURIComponent(svg ? svg : placeHolderSVG)}`}
+        alt="Generated QR Code"
+        style={{
+          width: '100%',
+          maxWidth: '300px',
+          height: 'auto',
+          display: 'block'
+        }}
+        fetchPriority="high"
+        decoding="async"
+      />
+    </div>
   );
 }
